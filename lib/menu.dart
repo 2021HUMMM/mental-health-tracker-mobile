@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:mental_health_tracker/widgets/left_drawer.dart';
+import 'package:mental_health_tracker/moodentry_form.dart';
 
 class MyHomePage extends StatelessWidget {
   final String npm = '2306210714'; // NPM
@@ -7,14 +8,14 @@ class MyHomePage extends StatelessWidget {
   final String className = 'PBP C'; // Kelas
 
   final List<ItemHomepage> items = [
-          ItemHomepage("Lihat Mood", Icons.mood),
-          ItemHomepage("Tambah Mood", Icons.add),
-          ItemHomepage("Logout", Icons.logout),
-      ];
+    ItemHomepage("Lihat Mood", Icons.mood),
+    ItemHomepage("Tambah Mood", Icons.add),
+    ItemHomepage("Logout", Icons.logout),
+  ];
 
   MyHomePage({super.key});
 
-@override
+  @override
   Widget build(BuildContext context) {
     // Scaffold menyediakan struktur dasar halaman dengan AppBar dan body.
     return Scaffold(
@@ -30,7 +31,11 @@ class MyHomePage extends StatelessWidget {
         ),
         // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
         backgroundColor: Theme.of(context).colorScheme.primary,
+        // Mengganti warna icon drawer menjadi putih
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
+      // Masukkan drawer sebagai parameter nilai drawer dari widget Scaffold
+      drawer: const LeftDrawer(),
       // Body halaman dengan padding di sekelilingnya.
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -97,8 +102,8 @@ class MyHomePage extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   // Kartu informasi yang menampilkan title dan content.
 
-  final String title;  // Judul kartu.
-  final String content;  // Isi kartu.
+  final String title; // Judul kartu.
+  final String content; // Isi kartu.
 
   const InfoCard({super.key, required this.title, required this.content});
 
@@ -109,7 +114,8 @@ class InfoCard extends StatelessWidget {
       elevation: 2.0,
       child: Container(
         // Mengatur ukuran dan jarak di dalam kartu.
-        width: MediaQuery.of(context).size.width / 3.5, // menyesuaikan dengan lebar device yang digunakan.
+        width: MediaQuery.of(context).size.width /
+            3.5, // menyesuaikan dengan lebar device yang digunakan.
         padding: const EdgeInsets.all(16.0),
         // Menyusun title dan content secara vertikal.
         child: Column(
@@ -126,20 +132,20 @@ class InfoCard extends StatelessWidget {
     );
   }
 }
- class ItemHomepage {
-     final String name;
-     final IconData icon;
 
-     ItemHomepage(this.name, this.icon);
- }
+class ItemHomepage {
+  final String name;
+  final IconData icon;
 
+  ItemHomepage(this.name, this.icon);
+}
 
 class ItemCard extends StatelessWidget {
   // Menampilkan kartu dengan ikon dan nama.
 
-  final ItemHomepage item; 
-  
-  const ItemCard(this.item, {super.key}); 
+  final ItemHomepage item;
+
+  const ItemCard(this.item, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -148,16 +154,24 @@ class ItemCard extends StatelessWidget {
       color: Theme.of(context).colorScheme.secondary,
       // Membuat sudut kartu melengkung.
       borderRadius: BorderRadius.circular(12),
-      
+
       child: InkWell(
         // Aksi ketika kartu ditekan.
         onTap: () {
-          // Menampilkan pesan SnackBar saat kartu ditekan.
+          // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
+            ..showSnackBar(SnackBar(
+                content: Text("Kamu telah menekan tombol ${item.name}!")));
+
+          // Navigate ke route yang sesuai (tergantung jenis tombol)
+          if (item.name == "Tambah Mood") {
+            // TODO: Gunakan Navigator.push untuk melakukan navigasi ke MaterialPageRoute yang mencakup MoodEntryFormPage.
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MoodEntryFormPage()));
+          }
         },
         // Container untuk menyimpan Icon dan Text
         child: Container(
@@ -185,6 +199,4 @@ class ItemCard extends StatelessWidget {
       ),
     );
   }
-  
 }
-  
